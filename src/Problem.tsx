@@ -20,8 +20,8 @@ const Problem = ({route}: any) => {
   console.log('yt3data', data);
 
   if (!route) return <div>loading...</div>;
-  if (error) return <div> failed to fetch</div>;
-  if (!data) return <div> loading...</div>;
+  if (error) return <div>failed to fetch</div>;
+  if (!data || !data.items) return <div> loading...</div>;
 
   const videoIds = data.items.map((d: any) => d.id.videoId);
 
