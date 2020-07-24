@@ -44,7 +44,7 @@ const Problem = ({route}: any) => {
           id="player"
           width="320"
           height="195"
-          src={`http://www.youtube.com/embed/${id}?enablejsapi=1&origin=http://example.com`}></iframe>
+          src={`https://www.youtube.com/embed/${id}?enablejsapi=1&origin=http://example.com`}></iframe>
       ))}
     </div>
   );
