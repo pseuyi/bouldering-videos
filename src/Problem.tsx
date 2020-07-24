@@ -25,7 +25,7 @@ const Problem = ({route}: any) => {
 
   return (
     <div>
-      <img src={route.imgSqSmall}></img>
+      <img src={route.imgSqSmall} alt={route.name}></img>
       <p>{route.name}</p>
       <p>{route.rating}</p>
       <p>{route.location.join('-')}</p>
@@ -39,6 +39,8 @@ const Problem = ({route}: any) => {
       </ul>
       {videoIds.slice(0, 5).map((id: string) => (
         <iframe
+          key={id}
+          title={id}
           id="player"
           width="320"
           height="195"
