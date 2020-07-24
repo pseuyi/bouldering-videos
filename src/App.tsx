@@ -14,16 +14,17 @@ function App() {
   const [problem, setProblem] = useState();
 
   const {data, error} = useSWR(
-    `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lon}&maxDistance=50&minDiff=V0&maxDiff=V15&key=${MP_KEY}`,
+    `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lon}&maxDistance=10&maxResults=20&minDiff=V0&maxDiff=V15&key=${MP_KEY}`,
     fetcher,
   );
 
+  // TODO: create error boundary
   if (error) return <div> failed to fetch</div>;
   if (!data) return <div> loading...</div>;
-  console.log('data', data);
+
+  console.log('mp data', data);
 
   const onsuccess = (pos: any) => {
-    console.log('pos', pos);
     setLat(pos.coords.latitude);
     setLon(pos.coords.longitude);
   };
