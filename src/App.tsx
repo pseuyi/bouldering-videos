@@ -1,36 +1,32 @@
 import React from 'react';
 import useSWR from 'swr';
 import {useState} from 'react';
-import Problem from './Problem';
+import Route, {RouteType} from './Route';
 import './App.css';
 
 const MP_KEY = process.env.REACT_APP_MP_API_KEY;
 
-const fetcher = (url: any) => fetch(url).then(r => r.json());
+const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 const App: React.FC<{data: any}> = ({data}) => {
-  const [problem, setProblem] = useState();
-  const handleProblemClick = (route: any) => {
-    setProblem(route);
-  };
+  const [route, setRoute] = useState<RouteType>();
 
   return (
-    <div className="App">
-      <header className="App-header">bouldering videos</header>
-
+    <>
       <ul>
-        {data.routes.map((r: any, i: number) => (
-          <li onClick={() => handleProblemClick(r)} key={i}>
+        {data.routes.map((r: RouteType, i: number) => (
+          <li onClick={() => setRoute(r)} key={i}>
             {r.name} * {r.rating} * {r.location[r.location.length - 1]}
           </li>
         ))}
       </ul>
-      {problem ? <Problem route={problem} /> : null}
-    </div>
+      {route ? <Route route={route} /> : null}
+    </>
   );
 };
 
 const AppContainer: React.FC = () => {
+  // castle rock
   const [lat, setLat] = useState(37.22); //useState(40.715);
   const [lon, setLon] = useState(-122.12); //useState(-73.993);
 
@@ -46,7 +42,9 @@ const AppContainer: React.FC = () => {
   console.log('mp data', data);
 
   return (
-    <>
+    <div className="App">
+      <header className="App-header">bouldering videos</header>
+
       <label>lat</label>
       <input
         name="lat"
@@ -65,7 +63,7 @@ const AppContainer: React.FC = () => {
         value={lon}></input>
 
       <App data={data} />
-    </>
+    </div>
   );
 };
 

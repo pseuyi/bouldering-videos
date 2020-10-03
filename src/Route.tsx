@@ -1,22 +1,40 @@
 import React from 'react';
 import useSWR from 'swr';
 
+export interface RouteType {
+  id: number;
+  imgMedium: string;
+  imgSmall: string;
+  imgSmallMed: string;
+  imgSqSmall: string;
+  latitude: number;
+  longitude: number;
+  location: string[];
+  name: string;
+  pitches: unknown;
+  rating: string;
+  starVotes: number;
+  stars: number;
+  type: string;
+  url: string;
+}
+
 const YT_BASE = 'https://www.youtube.com/watch?v=';
 const YT_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
 const getUrl = (q: string) =>
   `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${q}&key=${YT_KEY}`;
 
-const fetcher = (url: any) => fetch(url).then(r => r.json());
+const fetcher = (url: string) => fetch(url).then(r => r.json());
 
-const Problem = ({route}: any) => {
+const Route: React.FC<{route: RouteType}> = ({route}) => {
   // TODO: preprocess query
   const url = getUrl(
     `${route.name.split('/')[0]} ${route.location[route.location.length - 1]}`,
   );
   const {data, error} = useSWR(url, fetcher);
 
-  console.log('route', route);
+  //console.log('route', route);
   console.log('yt3data', data);
 
   if (!route) return <div>loading...</div>;
@@ -52,4 +70,4 @@ const Problem = ({route}: any) => {
   );
 };
 
-export default Problem;
+export default Route;
