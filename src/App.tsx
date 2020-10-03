@@ -8,10 +8,31 @@ const MP_KEY = process.env.REACT_APP_MP_API_KEY;
 
 const fetcher = (url: any) => fetch(url).then(r => r.json());
 
-function App() {
-  const [lat, setLat] = useState(40.03);
-  const [lon, setLon] = useState(-105.25);
+const App: React.FC<{data: any}> = ({data}) => {
   const [problem, setProblem] = useState();
+  const handleProblemClick = (route: any) => {
+    setProblem(route);
+  };
+
+  return (
+    <div className="App">
+      <header className="App-header">bouldering videos</header>
+
+      <ul>
+        {data.routes.map((r: any, i: number) => (
+          <li onClick={() => handleProblemClick(r)} key={i}>
+            {r.name} * {r.rating} * {r.location[r.location.length - 1]}
+          </li>
+        ))}
+      </ul>
+      {problem ? <Problem route={problem} /> : null}
+    </div>
+  );
+};
+
+const AppContainer: React.FC = () => {
+  const [lat, setLat] = useState(37.22); //useState(40.715);
+  const [lon, setLon] = useState(-122.12); //useState(-73.993);
 
   const {data, error} = useSWR(
     `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lon}&maxDistance=10&maxResults=20&minDiff=V0&maxDiff=V15&key=${MP_KEY}`,
@@ -24,46 +45,28 @@ function App() {
 
   console.log('mp data', data);
 
-  const onsuccess = (pos: any) => {
-    setLat(pos.coords.latitude);
-    setLon(pos.coords.longitude);
-  };
-
-  const onerror = () => {
-    return <div>error</div>;
-  };
-
-  if (!navigator.geolocation) {
-    return <div>Geolocation is not supported by your browser</div>;
-  } else {
-    navigator.geolocation.getCurrentPosition(onsuccess, onerror);
-  }
-
-  const handleProblemClick = (route: any) => {
-    setProblem(route);
-  };
-
-  const showProblem = () => {
-    if (problem) return <Problem route={problem} />;
-    else return <></>;
-  };
-
   return (
-    <div className="App">
-      <header className="App-header">bouldering videos</header>
-      <div>lat: {lat}</div>
-      <div>lon: {lon}</div>
+    <>
+      <label>lat</label>
+      <input
+        name="lat"
+        type="text"
+        onChange={(e: React.FormEvent<HTMLInputElement>) =>
+          setLat(parseInt(e.currentTarget.value, 10))
+        }
+        value={lat}></input>
+      <label>lon</label>
+      <input
+        name="lon"
+        type="text"
+        onChange={(e: React.FormEvent<HTMLInputElement>) =>
+          setLon(parseInt(e.currentTarget.value, 10))
+        }
+        value={lon}></input>
 
-      <ul>
-        {data.routes.map((r: any, i: number) => (
-          <li onClick={() => handleProblemClick(r)} key={i}>
-            {r.name} * {r.rating} * {r.location[r.location.length - 1]}
-          </li>
-        ))}
-      </ul>
-      {showProblem()}
-    </div>
+      <App data={data} />
+    </>
   );
-}
+};
 
-export default App;
+export default AppContainer;

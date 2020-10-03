@@ -5,7 +5,7 @@ const YT_BASE = 'https://www.youtube.com/watch?v=';
 const YT_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
 const getUrl = (q: string) =>
-  `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${q}&key=${YT_KEY}`;
+  `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${q}&key=${YT_KEY}`;
 
 const fetcher = (url: any) => fetch(url).then(r => r.json());
 
