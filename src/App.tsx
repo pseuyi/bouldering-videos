@@ -1,80 +1,148 @@
-import React from 'react';
+import React, {useState} from 'react';
 import useSWR from 'swr';
-import {useState} from 'react';
+//import {createSliderWithTooltip, Range as RCRange} from 'rc-slider';
+import {Range} from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
+import data from './data';
 import PlaceAutocomplete from './PlaceAutocomplete';
-import Route, {RouteType} from './Route';
-import './App.css';
+import Routes from './Routes';
+//import './App.css';
 
 const MP_KEY = process.env.REACT_APP_MP_API_KEY;
 
+//const Range = createSliderWithTooltip(RCRange);
+//@ts-ignore
+const marksWithLabels = [...Array(17).keys()].reduce((acc, cur) => {
+  acc[cur] = `V${cur}`;
+  return acc;
+}, {});
+
 const Wrapper: React.FC = ({children}) => {
   return (
-    <div className="wrapper">
-      <div className="content">{children}</div>
+    <div className="mx-6 my-3 md:mx-12 md:my-6 lg:mx-24 lg:my-12">
+      <div className="">{children}</div>
     </div>
   );
 };
 
-const App: React.FC<{data: any}> = ({data}) => {
-  const [route, setRoute] = useState<RouteType>();
-
-  return (
-    <>
-      <ul>
-        {data.routes.map((r: RouteType, i: number) => (
-          <li onClick={() => setRoute(r)} key={i}>
-            {r.name} * {r.rating} * {r.location[r.location.length - 1]}
-          </li>
-        ))}
-      </ul>
-      {route ? <Route route={route} /> : null}
-    </>
-  );
-};
-
 const AppContainer: React.FC = () => {
+  // slider state
+  const [minGrade, setMinGrade] = useState<number>(3);
+  const [maxGrade, setMaxGrade] = useState<number>(14);
+
   // castle rock
   const [lat, setLat] = useState<number | undefined>(36.22); //useState(40.715);
   const [lng, setLng] = useState<number | undefined>(-122.12); //useState(-73.993);
 
+  /*
   const {data} = useSWR(
     `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lng}&maxDistance=10&maxResults=20&minDiff=V0&maxDiff=V15&key=${MP_KEY}`,
   );
+   */
 
   // TODO: create error boundary
   //if (error) return <div> failed to fetch</div>;
   if (!data) return <Wrapper> loading...</Wrapper>;
 
-  console.log('mountain project: ', data);
+  const cnInput = 'border rounded border-gray-600 p-2 w-full';
+  const cnLabel = 'text-md font-thin text-blue-600';
+  const activeDotColor = '#2563EB'; //blue700
+  const handleColor = '#2563EB';
+  const railColor = '#D1D5DB';
+  const gray600 = '#4B5563';
+
   return (
-    <>
-      <header className="App-header">bouldering videos</header>
-      <PlaceAutocomplete setLat={setLat} setLng={setLng} />
-      <Wrapper>
-        <div>
-          <label>lat</label>
-          <input
-            name="lat"
-            type="text"
-            onChange={(e: React.FormEvent<HTMLInputElement>) =>
-              setLat(parseInt(e.currentTarget.value, 10))
-            }
-            value={lat}></input>
+    <Wrapper>
+      <header className="text-6xl font-bold mb-6">
+        <img className="inline mr-6" width="100" src="boulderer.png" />
+        <span>boulderer</span>
+      </header>
+
+      <div className="flex flex-col mb-6">
+        <label className={cnLabel}>location</label>
+        <PlaceAutocomplete
+          className={cnInput}
+          setLat={setLat}
+          setLng={setLng}
+        />
+      </div>
+
+      <div className="flex flex-col mb-12">
+        <label className={cnLabel}>grade</label>
+        <div className="px-1 py-2">
+          <Range
+            className="h-1/12 w-full relative"
+            marks={marksWithLabels}
+            dots
+            railStyle={{backgroundColor: railColor}}
+            trackStyle={[{backgroundColor: handleColor}]}
+            handleStyle={[
+              {
+                backgroundColor: handleColor,
+                borderColor: handleColor,
+                width: '8px',
+                borderRadius: '0',
+              },
+              {
+                backgroundColor: handleColor,
+                borderColor: handleColor,
+                width: '8px',
+                borderRadius: '0',
+              },
+            ]}
+            dotStyle={{
+              backgroundColor: railColor,
+              borderColor: railColor,
+              width: '0px',
+              borderRadius: '0',
+            }}
+            activeDotStyle={{
+              backgroundColor: activeDotColor,
+              borderColor: activeDotColor,
+            }}
+            min={0}
+            max={17}
+            step={1}
+            value={[minGrade, maxGrade]}
+            onChange={([min, max]) => {
+              setMinGrade(min);
+              setMaxGrade(max);
+            }}
+          />
         </div>
-        <div>
-          <label>lng</label>
-          <input
-            name="lng"
-            type="text"
-            onChange={(e: React.FormEvent<HTMLInputElement>) =>
-              setLng(parseInt(e.currentTarget.value, 10))
-            }
-            value={lng}></input>
-        </div>
-        <App data={data} />
-      </Wrapper>
-    </>
+      </div>
+
+      {/*
+      <div className="flex flex-col">
+        <label className="text-md font-thin">latitude</label>
+        <input
+          className={cnInput}
+          name="lat"
+          type="text"
+          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+            setLat(parseInt(e.currentTarget.value, 10))
+          }
+          value={lat}></input>
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-md font-thin">longitude</label>
+        <input
+          className={cnInput}
+          name="lng"
+          type="text"
+          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+            setLng(parseInt(e.currentTarget.value, 10))
+          }
+          value={lng}></input>
+      </div>
+      */}
+
+      <Routes data={data} />
+
+      <div className="mt-24">@pseuyi</div>
+    </Wrapper>
   );
 };
 

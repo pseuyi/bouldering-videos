@@ -5,12 +5,16 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const fetcher = (url: string) => fetch(url).then(r => r.json());
+const fetcher = (url: string) => {
+  //console.log('fetching ', url);
+  return fetch(url).then(r => r.json());
+};
 ReactDOM.render(
   <React.StrictMode>
     <SWRConfig
       value={{
         fetcher,
+          //revalidateOnMount: false,
       }}>
       <App />
     </SWRConfig>
