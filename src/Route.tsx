@@ -1,6 +1,6 @@
 import React from 'react';
 import useSWR from 'swr';
-import {ytData as data} from './data';
+//import {ytData as data} from './data';
 
 export interface RouteType {
   id: number;
@@ -32,13 +32,11 @@ const Route: React.FC<{route: RouteType}> = ({route}) => {
     `${route.name.split('/')[0]} ${route.location[2]} ${route.rating}`,
   );
 
-  //const {data, error} = useSWR(url);
+  const {data, error} = useSWR(url);
 
-  //console.log('route', route);
-  //console.log('yt3data', data);
 
   if (!route) return <div>loading...</div>;
-  //if (error) return <div>failed to fetch</div>;
+  if (error) return <div>failed to fetch</div>;
   if (!data || !data.items) return <div> loading...</div>;
 
   const videoIds = data.items.map((d: any) => d.id.videoId);

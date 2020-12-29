@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
 import useSWR from 'swr';
-//import {createSliderWithTooltip, Range as RCRange} from 'rc-slider';
 import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-import data from './data';
+//import data from './data';
 import PlaceAutocomplete from './PlaceAutocomplete';
 import Routes from './Routes';
-//import './App.css';
 
 const MP_KEY = process.env.REACT_APP_MP_API_KEY;
 
-//const Range = createSliderWithTooltip(RCRange);
 //@ts-ignore
 const marksWithLabels = [...Array(17).keys()].reduce((acc, cur) => {
   acc[cur] = `V${cur}`;
@@ -35,15 +32,13 @@ const AppContainer: React.FC = () => {
   const [lat, setLat] = useState<number | undefined>(36.22); //useState(40.715);
   const [lng, setLng] = useState<number | undefined>(-122.12); //useState(-73.993);
 
-  /*
-  const {data} = useSWR(
+  const {data, error} = useSWR(
     `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lng}&maxDistance=10&maxResults=20&minDiff=V0&maxDiff=V15&key=${MP_KEY}`,
   );
-   */
 
   // TODO: create error boundary
-  //if (error) return <div> failed to fetch</div>;
-  if (!data) return <Wrapper> loading...</Wrapper>;
+  if (error) return <div>failed to fetch</div>;
+  if (!data) return <Wrapper>loading...</Wrapper>;
 
   const cnInput = 'border rounded border-gray-600 p-2 w-full';
   const cnLabel = 'text-md font-thin text-blue-600';
@@ -54,7 +49,7 @@ const AppContainer: React.FC = () => {
 
   return (
     <Wrapper>
-      <header className="text-6xl font-bold mb-6">
+      <header className="text-6xl font-bold mb-6 cursor-default text-gray-800">
         <img className="inline mr-6" width="100" src="boulderer.png" />
         <span>boulderer</span>
       </header>
@@ -112,32 +107,6 @@ const AppContainer: React.FC = () => {
           />
         </div>
       </div>
-
-      {/*
-      <div className="flex flex-col">
-        <label className="text-md font-thin">latitude</label>
-        <input
-          className={cnInput}
-          name="lat"
-          type="text"
-          onChange={(e: React.FormEvent<HTMLInputElement>) =>
-            setLat(parseInt(e.currentTarget.value, 10))
-          }
-          value={lat}></input>
-      </div>
-
-      <div className="flex flex-col">
-        <label className="text-md font-thin">longitude</label>
-        <input
-          className={cnInput}
-          name="lng"
-          type="text"
-          onChange={(e: React.FormEvent<HTMLInputElement>) =>
-            setLng(parseInt(e.currentTarget.value, 10))
-          }
-          value={lng}></input>
-      </div>
-      */}
 
       <Routes data={data} />
 
