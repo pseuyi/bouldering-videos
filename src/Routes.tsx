@@ -136,7 +136,7 @@ const Routes: React.FC<{data: {routes: RouteType[]}}> = ({data}) => {
             }
           } else if (i + D > T) {
             // bottom row
-            style = {borderBottom: 'border'};
+            style = {borderBottom: border};
 
             if (!neighbor && !hovered) {
               style = {
