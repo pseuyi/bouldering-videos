@@ -29,8 +29,8 @@ const AppContainer: React.FC = () => {
   const [maxGrade, setMaxGrade] = useState<number>(14);
 
   // castle rock
-  const [lat, setLat] = useState<number | undefined>(36.22); //useState(40.715);
-  const [lng, setLng] = useState<number | undefined>(-122.12); //useState(-73.993);
+  const [lat, setLat] = useState<number | undefined>(40.715);
+  const [lng, setLng] = useState<number | undefined>(-73.993);
 
   const {data, error} = useSWR(
     `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lng}&maxDistance=10&maxResults=20&minDiff=V0&maxDiff=V15&key=${MP_KEY}`,
