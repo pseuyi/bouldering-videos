@@ -24,10 +24,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIurJzX_IWah-f9b11SIWty1t_V8WrKfc&libraries=places"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,700;1,400;1,700&family=PT+Serif&display=swap');
+    </style>
+
     <title>React App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="map"></div>
     <div id="root"></div>
     <!--
       This HTML file is a template.
