@@ -6,8 +6,6 @@ const Routes: React.FC<{data: {routes: RouteType[]}}> = ({data}) => {
   const [hoverCell, setHoverCell] = useState();
   const [hoverRoute, setHoverRoute] = useState();
 
-  console.log('hoverCell ', hoverCell);
-
   const D = 4; // grid dimension
   const T = 19; // total cells
   const findNeighbors = () => {
@@ -57,27 +55,126 @@ const Routes: React.FC<{data: {routes: RouteType[]}}> = ({data}) => {
 
   const neighbors = findNeighbors();
 
-  const cnGrid =
-    'grid grid-cols-4 p-6 border border-gray-600 rounded hover:bg-gray-200 divide-y divide-gray-600 divide-solid';
+  const cnGrid = 'grid grid-cols-4 rounded hover:bg-yellow-100 text-gray-800';
   return (
     <>
       <div className={cnGrid}>
         {data.routes.map((r: RouteType, i: number) => {
-          let cn = 'cursor-pointer p-3 py-6 text-lg';
+          let cn = 'cursor-pointer p-8 text-lg';
 
-          if (hoverCell !== i) {
-            //cn += ' rounded';
-          }
+          const shade = () => Math.round(Math.round(hoverRoute.stars) * 100);
+          const bg = hoverRoute ? `bg-yellow-${shade()}` : 'bg-yellow-400';
+          const text = hoverRoute ? `text-yellow-${shade()}` : '';
+          const gray600 = '#4B5563';
+          const border = `1px solid ${gray600}`;
 
-          const bg = hoverRoute ? `bg-yellow-${Math.round(Math.round(hoverRoute.stars) * 100)}` : 'bg-yellow-400'
-          if (neighbors.includes(i)) {
-            cn += ` ${bg} text-yellow-500`;
+          const neighbor = neighbors.includes(i);
+          const hovered = i === hoverCell;
+
+          if (neighbor) {
+            cn += ` ${bg} ${text}`;
           } else {
             cn += ` border-gray-600 hover:${bg}`;
           }
 
+          let style: React.CSSProperties = {};
+          if (i === T) {
+            // bottom right cell
+            style = {
+              borderBottomRightRadius: '0.25rem',
+            };
+
+            if (neighbor || hovered) {
+              style = {...style, borderRight: border, borderBottom: border};
+            } else {
+              style = {...style, border};
+            }
+          } else if (i === 0) {
+            // top left cell
+            style = {
+              borderLeft: border,
+              borderTop: border,
+              borderTopLeftRadius: '0.25rem',
+            };
+          } else if (i % 4 === 0) {
+            // left col
+            style = {
+              borderLeft: border,
+              borderTop: border,
+            };
+
+            if (neighbor || hovered) {
+              style = {borderLeft: border};
+
+              //bottom left cell
+              if (i === T + 1 - D) {
+                style = {borderLeft: border, borderBottom: border};
+              }
+            } else if (i === T + 1 - D) {
+              style = {...style, borderBottom: border};
+            }
+          } else if (i <= D - 1) {
+            //top row
+            style = {
+              borderLeft: border,
+              borderTop: border,
+            };
+
+            if (neighbor || hovered) {
+              style = {borderTop: border};
+              if (i === D - 1) {
+                style = {
+                  ...style,
+                  borderRight: border,
+                };
+              }
+            } else if (i === D - 1) {
+              style = {
+                ...style,
+                borderRight: border,
+              };
+            }
+          } else if (i + D > T) {
+            // bottom row
+            style = {borderBottom: 'border'};
+
+            if (!neighbor && !hovered) {
+              style = {
+                ...style,
+                borderLeft: border,
+                borderTop: border,
+              };
+            }
+
+            //bottom right cell
+            if (i === T - 3) {
+              style['borderBottomLeftRadius'] = '0.25rem';
+            }
+          } else if ((i + 1) % 4 === 0) {
+            // right col
+            if (!neighbor && !hovered) {
+              style = {
+                ...style,
+                borderLeft: border,
+                borderTop: border,
+              };
+            }
+
+            style = {...style, borderRight: border};
+
+            if (i === D - 1) {
+              style['borderTopRightRadius'] = '0.25rem';
+            }
+          } else if (!neighbor && !hovered) {
+            style = {
+              borderLeft: border,
+              borderTop: border,
+            };
+          }
+
           return (
             <div
+              style={style}
               className={cn}
               onClick={() => setRoute(r)}
               onMouseEnter={() => {
@@ -89,10 +186,7 @@ const Routes: React.FC<{data: {routes: RouteType[]}}> = ({data}) => {
                 setHoverRoute(undefined);
               }}
               key={i + 1}>
-              {/*<p>stars {r.stars}</p>*/}
               {r.name} {r.rating}
-              {/**  * {r.location[r.location.length - 1]}*/}
-
               {route?.id === r.id ? <Route route={route} /> : null}
             </div>
           );
