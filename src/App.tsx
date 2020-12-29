@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-//import data from './data';
+import mockData from './data';
 import PlaceAutocomplete from './PlaceAutocomplete';
 import Routes from './Routes';
 
@@ -27,18 +27,19 @@ const AppContainer: React.FC = () => {
   // slider state
   const [minGrade, setMinGrade] = useState<number>(3);
   const [maxGrade, setMaxGrade] = useState<number>(14);
+  const [queryMin, setQueryMin] = useState<number>(0);
+  const [queryMax, setQueryMax] = useState<number>(17);
 
-  // castle rock
   const [lat, setLat] = useState<number | undefined>(40.715);
   const [lng, setLng] = useState<number | undefined>(-73.993);
 
   const {data, error} = useSWR(
-    `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lng}&maxDistance=10&maxResults=20&minDiff=V0&maxDiff=V15&key=${MP_KEY}`,
+    `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lng}&maxDistance=10&maxResults=20&minDiff=V${queryMin}&maxDiff=V${queryMax}&key=${MP_KEY}`,
   );
 
   // TODO: create error boundary
-  if (error) return <div>failed to fetch</div>;
-  if (!data) return <Wrapper>loading...</Wrapper>;
+  //if (error) return <div>failed to fetch</div>;
+  //if (!data) return <Wrapper>loading...</Wrapper>;
 
   const cnInput = 'border rounded border-gray-600 p-2 w-full';
   const cnLabel = 'text-md font-thin text-blue-600';
@@ -104,11 +105,15 @@ const AppContainer: React.FC = () => {
               setMinGrade(min);
               setMaxGrade(max);
             }}
+            onAfterChange={() => {
+              setQueryMin(minGrade);
+              setQueryMax(maxGrade);
+            }}
           />
         </div>
       </div>
 
-      <Routes data={data} />
+        {data ? <Routes data={data} /> : <div>loading</div>}
 
       <div className="mt-24">@pseuyi</div>
     </Wrapper>
