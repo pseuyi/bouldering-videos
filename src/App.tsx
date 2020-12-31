@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-import mockData from './data';
+//import mockData from './data';
 import PlaceAutocomplete from './PlaceAutocomplete';
 import Routes from './Routes';
 
@@ -38,7 +38,7 @@ const AppContainer: React.FC = () => {
   );
 
   // TODO: create error boundary
-  //if (error) return <div>failed to fetch</div>;
+  if (error) return <div>failed to fetch</div>;
   //if (!data) return <Wrapper>loading...</Wrapper>;
 
   const cnInput = 'border rounded border-gray-600 p-2 w-full outline-none';
@@ -46,7 +46,7 @@ const AppContainer: React.FC = () => {
   const activeDotColor = '#2563EB'; //blue700
   const handleColor = '#2563EB';
   const railColor = '#D1D5DB';
-  const gray600 = '#4B5563';
+  //const gray600 = '#4B5563';
 
   return (
     <Wrapper>

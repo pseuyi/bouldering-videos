@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Route from './Route';
-import Video from './Video';
 import {T} from './grid';
 import {Cell, RouteType} from './types';
 
 const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
-  const [selected, setSelected] = useState<RouteType|undefined>();
+  const [selected, setSelected] = useState<RouteType | undefined>();
   const [hoverCell, setHoverCell] = useState<Cell>();
   const [hoverRoute, setHoverRoute] = useState<any>();
 
@@ -37,10 +36,12 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
   }
 
   return (
-    <div className={cnGrid} onMouseLeave={() => {
-      //close popup if leaving grid
-      //setSelected(undefined);
-    }}>
+    <div
+      className={cnGrid}
+      onMouseLeave={() => {
+        //close popup if leaving grid
+        //setSelected(undefined);
+      }}>
       {routes.map((r: RouteType | undefined, i: number) => {
         return (
           <Route

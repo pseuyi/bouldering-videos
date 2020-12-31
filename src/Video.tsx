@@ -1,9 +1,9 @@
 import React from 'react';
 import useSWR from 'swr';
-import {ytData as mockData} from './data';
+//import {ytData as mockData} from './data';
 import {RouteType} from './types';
 
-const YT_BASE = 'https://www.youtube.com/watch?v=';
+//const YT_BASE = 'https://www.youtube.com/watch?v=';
 const YT_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
 const getUrl = (q: string) =>
