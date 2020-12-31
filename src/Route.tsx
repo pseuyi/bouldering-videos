@@ -1,70 +1,180 @@
 import React from 'react';
-import useSWR from 'swr';
-//import {ytData as data} from './data';
+import {findNeighbors, D, T} from './grid';
+import {Cell, RouteType} from './types';
+import Video from './Video';
 
-export interface RouteType {
-  id: number;
-  imgMedium: string;
-  imgSmall: string;
-  imgSmallMed: string;
-  imgSqSmall: string;
-  latitude: number;
-  longitude: number;
-  location: string[];
-  name: string;
-  pitches: unknown;
-  rating: string;
-  starVotes: number;
-  stars: number;
-  type: string;
-  url: string;
+interface Props {
+  cell: number;
+  hoverCell: Cell;
+  hoverRoute?: RouteType;
+  route?: RouteType;
+  selected?: RouteType;
+  setSelected: (v?: RouteType) => void;
+  setHoverCell: (v: Cell) => void;
+  setHoverRoute: (v: any) => void;
 }
 
-const YT_BASE = 'https://www.youtube.com/watch?v=';
-const YT_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
+const Route: React.FC<Props> = ({
+  cell,
+  hoverCell,
+  hoverRoute,
+  route,
+  selected,
+  setSelected,
+  setHoverCell,
+  setHoverRoute,
+}) => {
+  const neighbors = findNeighbors(hoverCell);
 
-const getUrl = (q: string) =>
-  `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${q}&key=${YT_KEY}`;
+  let cn = 'cursor-pointer p-8 text-lg';
 
-const Route: React.FC<{route: RouteType}> = ({route}) => {
-  // TODO: preprocess query
-  const url = getUrl(
-    `${route.name.split('/')[0]} ${route.location[2]} ${route.rating}`,
-  );
+  const shade = () =>
+    hoverRoute ? Math.round(Math.round(hoverRoute.stars) * 100) : 400;
+  const bg = hoverRoute ? `bg-yellow-${shade()}` : 'bg-yellow-400';
+  const text = hoverRoute ? `text-yellow-${shade()}` : '';
+  const gray600 = '#4B5563';
+  const border = `1px solid ${gray600}`;
 
-  const {data, error} = useSWR(url);
+  const neighbor = neighbors.includes(cell);
+  const hovered = cell === hoverCell;
 
+  if (neighbor) {
+    cn += ` ${bg} ${text}`;
+  } else {
+    cn += ` border-gray-600 hover:${bg}`;
+  }
 
-  if (!route) return <div>loading...</div>;
-  if (error) return <div>failed to fetch</div>;
-  if (!data || !data.items) return <div> loading...</div>;
+  let style: React.CSSProperties = {};
+  if (cell === T) {
+    // bottom right cell
+    style = {
+      borderBottomRightRadius: '0.25rem',
+    };
 
-  const videoIds = data.items.map((d: any) => d.id.videoId);
+    if (neighbor || hovered) {
+      style = {...style, borderRight: border, borderBottom: border};
+    } else {
+      style = {...style, border};
+    }
+  } else if (cell === 0) {
+    // top left cell
+    style = {
+      borderLeft: border,
+      borderTop: border,
+      borderTopLeftRadius: '0.25rem',
+    };
+  } else if (cell % 4 === 0) {
+    // left col
+    style = {
+      borderLeft: border,
+      borderTop: border,
+    };
 
+    if (neighbor || hovered) {
+      style = {borderLeft: border};
+
+      //bottom left cell
+      if (cell === T + 1 - D) {
+        style = {borderLeft: border, borderBottom: border};
+      }
+    } else if (cell === T + 1 - D) {
+      style = {...style, borderBottom: border};
+    }
+  } else if (cell <= D - 1) {
+    //top row
+    style = {
+      borderLeft: border,
+      borderTop: border,
+    };
+
+    if (neighbor || hovered) {
+      style = {borderTop: border};
+      if (cell === D - 1) {
+        style = {
+          ...style,
+          borderRight: border,
+        };
+      }
+    } else if (cell === D - 1) {
+      style = {
+        ...style,
+        borderRight: border,
+      };
+    }
+  } else if (cell + D > T) {
+    // bottom row
+    style = {borderBottom: border};
+
+    if (!neighbor && !hovered) {
+      style = {
+        ...style,
+        borderLeft: border,
+        borderTop: border,
+      };
+    }
+
+    //bottom right cell
+    if (cell === T - 3) {
+      style = {...style, borderBottomLeftRadius: '0.25rem'};
+    }
+  } else if ((cell + 1) % 4 === 0) {
+    // right col
+    if (!neighbor && !hovered) {
+      style = {
+        ...style,
+        borderLeft: border,
+        borderTop: border,
+      };
+    }
+
+    style = {...style, borderRight: border};
+
+    if (cell === D - 1) {
+      style['borderTopRightRadius'] = '0.25rem';
+    }
+  } else if (!neighbor && !hovered) {
+    style = {
+      borderLeft: border,
+      borderTop: border,
+    };
+  }
+
+  const routeDefined = route !== undefined;
   return (
-    <div>
-      <img src={route.imgSqSmall} alt={route.name}></img>
-      <p>{route.location.slice(-2).join(' : ')}</p>
-      {/*
+    <div
+      style={style}
+      className={cn}
+      onClick={() => {
+        if (selected?.id === route?.id) {
+          setSelected(undefined);
+        } else {
+          route && setSelected(route);
+        }
+      }}
+      onMouseEnter={() => {
+        //close popup if entering a non neighbor
+        /*
+        if (!neighbor) {
+          setSelected(undefined);
+        }
+         */
 
-      <div>videos</div>
-        <ul>
-        {data.items.map((v: any) => (
-          <li key={v.id.videoId}>
-            <a href={`${YT_BASE}${v.id.videoId}`}>{v.snippet.title}</a>
-          </li>
-        ))}
-      </ul>
-      {videoIds.slice(0, 5).map((id: string) => (
-        <iframe
-          key={id}
-          title={id}
-          id="player"
-          width="320"
-          height="195"
-          src={`https://www.youtube.com/embed/${id}?enablejsapi=1&origin=http://example.com`}></iframe>
-      ))}
-      */}
+        if (routeDefined) {
+          setHoverCell(cell);
+          setHoverRoute(route);
+        }
+      }}
+      onMouseLeave={() => {
+        if (routeDefined) {
+          setHoverCell(undefined);
+          setHoverRoute(undefined);
+        }
+      }}
+      key={cell + 1}>
+      {route?.name} {route?.rating}
+      {route !== undefined && selected?.id === route?.id ? (
+        <Video route={route} />
+      ) : null}
     </div>
   );
 };

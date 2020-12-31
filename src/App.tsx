@@ -41,7 +41,7 @@ const AppContainer: React.FC = () => {
   //if (error) return <div>failed to fetch</div>;
   //if (!data) return <Wrapper>loading...</Wrapper>;
 
-  const cnInput = 'border rounded border-gray-600 p-2 w-full';
+  const cnInput = 'border rounded border-gray-600 p-2 w-full outline-none';
   const cnLabel = 'text-md font-thin text-blue-600';
   const activeDotColor = '#2563EB'; //blue700
   const handleColor = '#2563EB';
@@ -113,7 +113,7 @@ const AppContainer: React.FC = () => {
         </div>
       </div>
 
-        {data ? <Routes data={data} /> : <div>loading</div>}
+      <Routes data={data} />
 
       <div className="mt-24">@pseuyi</div>
     </Wrapper>
