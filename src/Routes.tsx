@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Route from './Route';
-import {T} from './grid';
+import {findNeighbors, cellStyles, T} from './grid';
 import {Cell, RouteType} from './types';
 
 const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
@@ -35,6 +35,16 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
     );
   }
 
+  //const neighbors = findNeighbors(hoverCell);
+
+  let cn = 'cursor-pointer p-8 text-lg';
+
+  //const bg = 'bg-yellow-200';
+  const text = 'text-gray-600';
+
+  cn += ` bg-white ${text}`;
+  cn += ` hover:bg-yellow-400`;
+
   return (
     <div
       className={cnGrid}
@@ -43,10 +53,20 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
         //setSelected(undefined);
       }}>
       {routes.map((r: RouteType | undefined, i: number) => {
+        const cell = i;
+
+        /*
+        const neighbor = neighbors.includes(cell);
+        if (neighbor) {
+          cn += ` bg-yellow-400`;
+        }
+         */
+
         return (
           <Route
             key={i}
-            cell={i}
+            cell={cell}
+            cn={cn}
             hoverCell={hoverCell}
             hoverRoute={hoverRoute}
             route={r}
@@ -54,6 +74,7 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
             setSelected={setSelected}
             setHoverCell={setHoverCell}
             setHoverRoute={setHoverRoute}
+            style={{}}
           />
         );
       })}
