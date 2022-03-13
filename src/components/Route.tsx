@@ -1,25 +1,21 @@
 import React from 'react';
-import {Cell, RouteType} from './types';
+import {Cell, RouteType} from '../types';
 import Video from './Video';
 
 interface Props {
   cell: number;
   cn: string;
-  hoverCell: Cell;
-  hoverRoute?: RouteType;
   route?: RouteType;
   selected?: RouteType;
   setSelected: (v?: RouteType) => void;
   setHoverCell: (v: Cell) => void;
-  setHoverRoute: (v: any) => void;
+  setHoverRoute: (v?: RouteType) => void;
   style: React.CSSProperties;
 }
 
 const Route: React.FC<Props> = ({
   cell,
   cn,
-  hoverCell,
-  hoverRoute,
   route,
   selected,
   setSelected,
@@ -58,8 +54,9 @@ const Route: React.FC<Props> = ({
           setHoverRoute(undefined);
         }
       }}
-      key={cell + 1}>
+      key={cell}>
       {route?.name} {route?.rating}
+      {/* TODO expand cell to show these videos */}
       {route !== undefined && selected?.id === route?.id ? (
         <Video route={route} />
       ) : null}

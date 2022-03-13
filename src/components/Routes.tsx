@@ -1,17 +1,25 @@
 import React, {useState} from 'react';
 import Route from './Route';
-import {findNeighbors, cellStyles, T} from './grid';
-import {Cell, RouteType} from './types';
+import {T} from '../utils/grid';
+import {Cell, RouteType} from '../types';
+import mockData from '../data';
 
-const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
+interface Props {
+  todos: number[];
+}
+
+const Routes: React.FC<Props> = ({todos}) => {
+  console.log('todos: ', todos);
+  const data = mockData;
   const [selected, setSelected] = useState<RouteType | undefined>();
+  //TODO remove or add hover state css
   const [hoverCell, setHoverCell] = useState<Cell>();
-  const [hoverRoute, setHoverRoute] = useState<any>();
+  const [hoverRoute, setHoverRoute] = useState<RouteType>();
 
   const cnGrid = 'grid grid-cols-4 rounded hover:bg-yellow-100 text-gray-800';
 
   const routes: (RouteType | undefined)[] = data ? data.routes : [];
-  //create empty cells if fewer than T routes
+  //creates empty cells if fewer than T routes
   let i = routes.length;
   while (i <= T) {
     routes.push(undefined);
@@ -27,7 +35,7 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
   }
 
   //empty state
-  if (data?.routes !== undefined && !data?.routes.length) {
+  if (routes !== undefined && !routes.length) {
     return (
       <div className={cnGrid + ' border border-gray-600 p-8 text-lg'}>
         <div className="col-span-4 text-center">no routes found!</div>
@@ -35,11 +43,8 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
     );
   }
 
-  //const neighbors = findNeighbors(hoverCell);
-
   let cn = 'cursor-pointer p-8 text-lg';
 
-  //const bg = 'bg-yellow-200';
   const text = 'text-gray-600';
 
   cn += ` bg-white ${text}`;
@@ -50,7 +55,7 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
       className={cnGrid}
       onMouseLeave={() => {
         //close popup if leaving grid
-        //setSelected(undefined);
+        setSelected(undefined);
       }}>
       {routes.map((r: RouteType | undefined, i: number) => {
         const cell = i;
@@ -62,13 +67,13 @@ const Routes: React.FC<{data?: {routes: RouteType[]}}> = ({data}) => {
         }
          */
 
+        const inTodos = r && todos.includes(r.id)
+
         return (
           <Route
             key={i}
             cell={cell}
             cn={cn}
-            hoverCell={hoverCell}
-            hoverRoute={hoverRoute}
             route={r}
             selected={selected}
             setSelected={setSelected}

@@ -18,4 +18,12 @@ export interface RouteType {
   url: string;
 }
 
-
+export interface YoutubeVideoType {
+  id: {
+    kind: string;
+    videoId: string;
+  };
+  snippet: {
+    title: string;
+  };
+}

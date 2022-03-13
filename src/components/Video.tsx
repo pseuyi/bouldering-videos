@@ -1,16 +1,15 @@
 import React from 'react';
 import useSWR from 'swr';
 //import {ytData as mockData} from './data';
-import {RouteType} from './types';
+import {RouteType, YoutubeVideoType} from '../types';
 
-//const YT_BASE = 'https://www.youtube.com/watch?v=';
 const YT_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
 const getUrl = (q: string) =>
   `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${q}&key=${YT_KEY}`;
 
 const Video: React.FC<{route: RouteType}> = ({route}) => {
-  // TODO: preprocess query
+  // TODO: preprocess this query somewhere else?
   const url = getUrl(
     `${route.name.split('/')[0]} ${route.location[2]} ${route.rating}`,
   );
@@ -22,10 +21,11 @@ const Video: React.FC<{route: RouteType}> = ({route}) => {
   if (error) return <div>failed to fetch</div>;
   if (!data || !data.items) return <div> loading...</div>;
 
-  const videoIds = data.items.map((d: any) => d.id.videoId);
+  const videoIds = data.items.map((d: YoutubeVideoType ) => d.id.videoId);
 
   return (
     <div>
+      {/* TODO move metadata to Route and add fallback */}
       <img src={route.imgSqSmall} alt={route.name}></img>
       <p>{route.location.slice(-2).join(' : ')}</p>
 
@@ -39,6 +39,9 @@ const Video: React.FC<{route: RouteType}> = ({route}) => {
 
       <div className="absolute float-right flex transform -translate-x-1/2">
         {videoIds.slice(0, 4).map((id: string, idx: number) => {
+          
+          //TODO: remove?
+          // positions videos at 4 corners
           let cn = 'absolute float-right transform ';
           if (idx === 0) {
             cn += '-translate-y-72 translate-x-52';

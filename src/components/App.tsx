@@ -3,17 +3,15 @@ import useSWR from 'swr';
 import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-//import mockData from './data';
 import PlaceAutocomplete from './PlaceAutocomplete';
 import Routes from './Routes';
 
 const MP_KEY = process.env.REACT_APP_MP_API_KEY;
 
-//@ts-ignore
 const marksWithLabels = [...Array(17).keys()].reduce((acc, cur) => {
   acc[cur] = `V${cur}`;
   return acc;
-}, {});
+}, {} as Record<number, string>);
 
 const Wrapper: React.FC = ({children}) => {
   return (
@@ -33,21 +31,28 @@ const AppContainer: React.FC = () => {
   const [lat, setLat] = useState<number | undefined>(40.715);
   const [lng, setLng] = useState<number | undefined>(-73.993);
 
+  //getTodos
+  const {data, error} = useSWR(
+    `https://www.mountainproject.com/data/get-to-dos?email=pseuyi@gmail.com&key=${MP_KEY}`,
+  );
+
+  /*
   const {data, error} = useSWR(
     `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${lat}&lon=${lng}&maxDistance=10&maxResults=20&minDiff=V${queryMin}&maxDiff=V${queryMax}&key=${MP_KEY}`,
   );
 
   // TODO: create error boundary
   if (error) return <div>failed to fetch</div>;
-  //if (!data) return <Wrapper>loading...</Wrapper>;
+  */
+  if (!data) return <Wrapper>loading...</Wrapper>;
 
   const cnInput = 'border rounded border-gray-600 p-2 w-full outline-none';
   const cnLabel = 'text-md font-thin text-blue-600';
   const activeDotColor = '#2563EB'; //blue700
   const handleColor = '#2563EB';
   const railColor = '#D1D5DB';
-  //const gray600 = '#4B5563';
 
+  //TODO load user ticks/todos
   return (
     <Wrapper>
       <header className="text-6xl font-bold mb-6 cursor-default text-gray-800">
@@ -113,7 +118,7 @@ const AppContainer: React.FC = () => {
         </div>
       </div>
 
-      <Routes data={data} />
+      <Routes todos={data.toDos}/>
 
       <div className="mt-24">@pseuyi</div>
     </Wrapper>

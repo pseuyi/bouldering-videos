@@ -1,9 +1,9 @@
-import {Cell} from './types';
+import {Cell} from '../types';
 
 export const D = 4; // grid dimension
 export const T = 19; // total cells
 
-export const findNeighbors = (cell: Cell) => {
+export const findNeighbors = (cell: Cell): Cell[] => {
   return cell
     ? [-4, -3, -2, -1, 1, 2, 3, 4]
         .map(v => cell + v)

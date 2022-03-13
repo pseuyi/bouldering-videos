@@ -6,6 +6,8 @@ import React from 'react';
 //const google: any = window.google;
 
 /*global google*/
+//TODO fix this
+//eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 let autocomplete: google.maps.places.Autocomplete;
 
@@ -22,9 +24,9 @@ const PlaceAutocomplete: React.FC<Props> = ({className, setLat, setLng}) => {
     if (autocompleteInput) {
       // Create the autocomplete object, restricting the search predictions to
       // geographical location types.
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       autocomplete = new google.maps.places.Autocomplete(
-        // @ts-ignore
         autocompleteInput.current as HTMLInputElement,
         {
           types: ['geocode'],
@@ -33,7 +35,7 @@ const PlaceAutocomplete: React.FC<Props> = ({className, setLat, setLng}) => {
 
       // Avoid paying for data that you don't need by restricting the set of
       autocomplete.setFields(['geometry']);
-// When the user selects an address from the drop-down, populate the
+      // When the user selects an address from the drop-down, populate the
       // address fields in the form.
       autocomplete.addListener('place_changed', () => {
         // Get the place details from the autocomplete object.
@@ -41,9 +43,8 @@ const PlaceAutocomplete: React.FC<Props> = ({className, setLat, setLng}) => {
         const lat = place?.geometry?.location.lat();
         const lng = place?.geometry?.location.lng();
 
-        setLat(lat)
-        setLng(lng)
-
+        setLat(lat);
+        setLng(lng);
       });
     }
   }, [setLat, setLng]);
