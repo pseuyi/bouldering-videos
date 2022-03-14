@@ -2,6 +2,7 @@
   "name": "boulderer",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://pseuyi.github.io/bouldering-videos",
   "dependencies": {
     "@craco/craco": "^6.0.0",
     "@tailwindcss/postcss7-compat": "^2.0.2",
@@ -13,6 +14,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "autoprefixer": "^9.8.6",
+    "gh-pages": "^3.2.3",
     "postcss": "^7.0.35",
     "rc-slider": "^9.7.1",
     "react": "^16.13.1",
@@ -29,7 +31,9 @@
     "build": "CI= craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
