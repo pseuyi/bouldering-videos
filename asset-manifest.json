@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/boulderer/static/css/main.e68ccb76.chunk.css",
-    "main.js": "/boulderer/static/js/main.d59e662f.chunk.js",
-    "main.js.map": "/boulderer/static/js/main.d59e662f.chunk.js.map",
+    "main.js": "/boulderer/static/js/main.107bc2e2.chunk.js",
+    "main.js.map": "/boulderer/static/js/main.107bc2e2.chunk.js.map",
     "runtime-main.js": "/boulderer/static/js/runtime-main.6df10f4f.js",
     "runtime-main.js.map": "/boulderer/static/js/runtime-main.6df10f4f.js.map",
     "static/css/2.baa380cc.chunk.css": "/boulderer/static/css/2.baa380cc.chunk.css",
-    "static/js/2.62240fdb.chunk.js": "/boulderer/static/js/2.62240fdb.chunk.js",
-    "static/js/2.62240fdb.chunk.js.map": "/boulderer/static/js/2.62240fdb.chunk.js.map",
+    "static/js/2.813f62fb.chunk.js": "/boulderer/static/js/2.813f62fb.chunk.js",
+    "static/js/2.813f62fb.chunk.js.map": "/boulderer/static/js/2.813f62fb.chunk.js.map",
     "index.html": "/boulderer/index.html",
     "static/css/2.baa380cc.chunk.css.map": "/boulderer/static/css/2.baa380cc.chunk.css.map",
     "static/css/main.e68ccb76.chunk.css.map": "/boulderer/static/css/main.e68ccb76.chunk.css.map",
-    "static/js/2.62240fdb.chunk.js.LICENSE.txt": "/boulderer/static/js/2.62240fdb.chunk.js.LICENSE.txt"
+    "static/js/2.813f62fb.chunk.js.LICENSE.txt": "/boulderer/static/js/2.813f62fb.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.6df10f4f.js",
     "static/css/2.baa380cc.chunk.css",
-    "static/js/2.62240fdb.chunk.js",
+    "static/js/2.813f62fb.chunk.js",
     "static/css/main.e68ccb76.chunk.css",
-    "static/js/main.d59e662f.chunk.js"
+    "static/js/main.107bc2e2.chunk.js"
   ]
 }
