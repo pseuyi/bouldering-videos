@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Routes: React.FC<Props> = ({todos}) => {
-  console.log('todos: ', todos);
+  // console.log('todos: ', todos);
   const data = mockData;
   const [selected, setSelected] = useState<RouteType | undefined>();
   //TODO remove or add hover state css
