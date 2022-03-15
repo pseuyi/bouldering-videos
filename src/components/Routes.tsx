@@ -2,16 +2,17 @@ import React, {useState} from 'react';
 import Route from './Route';
 import {T} from '../utils/grid';
 import {Cell, RouteType} from '../types';
-import mockData from '../data';
+// import mockData from '../data';
 
 interface Props {
+  data: {routes: RouteType[]};
   todos: number[];
 }
 
-const Routes: React.FC<Props> = ({todos}) => {
-  // console.log('todos: ', todos);
-  const data = mockData;
+const Routes: React.FC<Props> = ({data, todos}) => {
+  // const data = mockData;
   const [selected, setSelected] = useState<RouteType | undefined>();
+
   //TODO remove or add hover state css
   const [hoverCell, setHoverCell] = useState<Cell>();
   const [hoverRoute, setHoverRoute] = useState<RouteType>();
@@ -19,6 +20,7 @@ const Routes: React.FC<Props> = ({todos}) => {
   const cnGrid = 'grid grid-cols-4 rounded hover:bg-yellow-100 text-gray-800';
 
   const routes: (RouteType | undefined)[] = data ? data.routes : [];
+
   //creates empty cells if fewer than T routes
   let i = routes.length;
   while (i <= T) {
@@ -65,9 +67,9 @@ const Routes: React.FC<Props> = ({todos}) => {
         if (neighbor) {
           cn += ` bg-yellow-400`;
         }
-         */
+        */
 
-        const inTodos = r && todos.includes(r.id)
+        const inTodos = r && todos.includes(r.id);
 
         return (
           <Route
@@ -79,7 +81,8 @@ const Routes: React.FC<Props> = ({todos}) => {
             setSelected={setSelected}
             setHoverCell={setHoverCell}
             setHoverRoute={setHoverRoute}
-            style={{}}
+            style={{backgroundColor: inTodos ? '' : ''}}
+            todo={inTodos}
           />
         );
       })}

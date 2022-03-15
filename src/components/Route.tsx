@@ -11,6 +11,7 @@ interface Props {
   setHoverCell: (v: Cell) => void;
   setHoverRoute: (v?: RouteType) => void;
   style: React.CSSProperties;
+  todo?: boolean;
 }
 
 const Route: React.FC<Props> = ({
@@ -22,12 +23,13 @@ const Route: React.FC<Props> = ({
   setHoverCell,
   setHoverRoute,
   style,
+  todo,
 }) => {
   const routeDefined = route !== undefined;
   return (
     <div
       style={style}
-      className={cn}
+      className={`${cn} relative`}
       onClick={() => {
         if (selected?.id === route?.id) {
           setSelected(undefined);
@@ -55,6 +57,7 @@ const Route: React.FC<Props> = ({
         }
       }}
       key={cell}>
+      {todo ? <div className="rounded-full border-black border-2 border-solid inline px-2 absolute top-0 left-0 text-xs">todo</div>: null}
       {route?.name} {route?.rating}
       {/* TODO expand cell to show these videos */}
       {route !== undefined && selected?.id === route?.id ? (
